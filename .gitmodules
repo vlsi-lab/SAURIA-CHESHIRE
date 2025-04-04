@@ -1,0 +1,3 @@
+[submodule "vendor/sauria"]
+	path = vendor/sauria
+	url = https://github.com/sromeo98/sauria.git
