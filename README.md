@@ -1,4 +1,4 @@
-# SAURIA-Cheshire Demo
+# SAURIA-CHESHIRE integration demonstrator
 
 This repository contains a demonstration of the integration of the SAURIA convolutional accelerator and CHESHIRE MCU. The project includes source code, hardware design files, and supporting scripts for simulation and FPGA deployment.
 
