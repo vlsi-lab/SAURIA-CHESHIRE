@@ -1,3 +1,6 @@
+#ifndef SAURIA_PSEUDO_DMA_H
+#define SAURIA_PSEUDO_DMA_H
+
 /*
  * Copyright 2025 PoliTo
  * Solderpad Hardware License, Version 2.1, see LICENSE.md for details.
@@ -13,3 +16,5 @@
 #include <stdint.h>
 
 int dma_run(uint32_t src_ptr, uint32_t dst_ptr, uint32_t size_transfer_byte);
+
+#endif // SAURIA_PSEUDO_DMA_H

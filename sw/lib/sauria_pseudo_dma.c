@@ -9,7 +9,7 @@
  * Info: Pseudo-DMA transfer functions.
  */
 
-#include <pseudo_dma.h>
+#include <sauria_pseudo_dma.h>
 
 /* Pseudo-DMA 1D trasfer function */
 int dma_run(uint32_t src_ptr, uint32_t dst_ptr, uint32_t size_transfer_byte){

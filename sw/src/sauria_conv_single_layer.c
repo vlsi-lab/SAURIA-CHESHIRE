@@ -25,7 +25,7 @@
  #include "sauria_approx_output_tensor_0_conv1.h"
  #include "sauria_input_tensor_conv1.h"
  #include "sauria_weight_tensor_conv1.h"
- #include "pseudo_dma.h"
+ #include "sauria_pseudo_dma.h"
  
  #define DEBUG
  
