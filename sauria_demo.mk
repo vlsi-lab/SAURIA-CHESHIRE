@@ -46,6 +46,7 @@ include $(shell bender path cheshire)/cheshire.mk
 
 set-up:
 	bender update
+	$(MAKE) update-sauria
 
 update-sauria:
 	# Removing pre-existing Sauria folder in vendor

@@ -25,7 +25,7 @@
  #include "sauria_approx_output_tensor_0_conv1.h"
  #include "sauria_input_tensor_conv1.h"
  #include "sauria_weight_tensor_conv1.h"
- #include "sauria_pseudo_dma.h"
+ //#include "sauria_pseudo_dma.h"
  
  #define DEBUG
  
@@ -52,6 +52,23 @@
  char ret_mem_hex_conv[13];
  uint32_t ret_mem;
  uint32_t ret_reg;
+
+ /* Pseudo-DMA 1D trasfer function */
+ int dma_run(uint32_t src_ptr, uint32_t dst_ptr, uint32_t size_transfer_byte){
+  /* Check if the pointers are valid and the size is non-zero */
+  if (!src_ptr || !dst_ptr || !size_transfer_byte) {
+    return -1;
+  }
+
+  volatile uint32_t *src = (volatile uint32_t *)src_ptr;
+  volatile uint32_t *dst = (volatile uint32_t *)dst_ptr;
+
+  for (uint32_t i = 0; i < size_transfer_byte; i++) {
+    dst[i] = src[i];
+  }
+
+  return 0;
+ }
  
  int main(void) {
      /* Immediately return an error if DMA is not present */
