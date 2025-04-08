@@ -50,7 +50,7 @@ set-up:
 update-sauria:
 	# Removing pre-existing Sauria folder in vendor
 	rm -rf $(SAURIA_ROOT)
-	cd $(SAURIA_DEMO_ROOT)/vendor && git clone https://github.com/TommiTerza/SAURIA.git
+	cd $(SAURIA_DEMO_ROOT)/vendor && git clone https://github.com/TommiTerza/sauria.git
 	cd $(SAURIA_ROOT) && git submodule update --init --recursive
 
 .PHONY: hw-chs
