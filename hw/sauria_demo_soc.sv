@@ -29,7 +29,7 @@
   /* SAURIA's parameters */
   parameter CFG_AXI_DATA_WIDTH    = 32,       // Configuration AXI4-Lite Slave data width
   parameter CFG_AXI_ADDR_WIDTH    = 32,       // Configuration AXI4-Lite Slave address width
-  parameter DATA_AXI_DATA_WIDTH   = 128,      // Data AXI4 Slave data width
+  parameter DATA_AXI_DATA_WIDTH   = 32,      // Data AXI4 Slave data width
   parameter DATA_AXI_ADDR_WIDTH   = 32,       // Data AXI4 Slave address width
   parameter DATA_AXI_ID_WIDTH     = 2,        // Data AXI4 Slave ID width
   localparam  BYTE = 8,

@@ -11,9 +11,9 @@
 #define Y 8                                                          //SYSTOLIC ARRAY ROWS
 //#define C_h 6                                         //PSUMS ROWS
 //#define C_w 6                                         //PSUMS COLUMNS
-#define A_h 32                                                        //IFMAPS ROWS
-#define A_w 32                                                       //IFMAPS COLUMNS
-#define AB_c 3                                                      //INPUT CHANNELS
+#define A_h 16                                                        //IFMAPS ROWS
+#define A_w 16                                                       //IFMAPS COLUMNS
+#define AB_c 2                                                      //INPUT CHANNELS
 #define B_h 3                                                        //WEIGHTS ROWS
 #define B_w 3                                                        //WEIGHTS COLUMNS
 #define s 1                                                          //STRIDE
@@ -23,9 +23,9 @@
 #define A_w_padded (A_w + 2*p)                                       //IFMAPS COLUMNS PADDED (if p = 0 -> A_w_padded = A_w)
 //#define A_h (1 + (C_h - 1)*s + 1 + (B_h - 1)*d - 1)   //IFMAPS ROWS
 //#define A_w (1 + (C_w - 1)*s + 1 + (B_w - 1)*d - 1)   //IFMAPS COLUMNS
-#define C_h 32                                                        //PSUMS ROWS ((int)(floor((A_h + 2*p - B_h - (B_h-1)*(d-1))/s) + 1))
-#define C_w 32                                                        //PSUMS COLUMNS ((int)(floor((A_w + 2*p - B_w - (B_w-1)*(d-1))/s) + 1))
-#define C_c 16                                                        //OUTPUT CHANNELS 
+#define C_h 16                                                        //PSUMS ROWS ((int)(floor((A_h + 2*p - B_h - (B_h-1)*(d-1))/s) + 1))
+#define C_w 16                                                        //PSUMS COLUMNS ((int)(floor((A_w + 2*p - B_w - (B_w-1)*(d-1))/s) + 1))
+#define C_c 8                                                        //OUTPUT CHANNELS 
 #define SRAMA_W 128                                                  //SRAM A DATA WIDTH
 #define IA_W 8                                                       //IFAMPS DATA WIDTH
 #define SRAMA_N (SRAMA_W / IA_W)                                     //SRAM A WORDS PER ROW
