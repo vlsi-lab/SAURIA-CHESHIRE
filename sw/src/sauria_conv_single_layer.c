@@ -19,9 +19,14 @@
  #include <string.h>
  #include <math.h>
  #include <stdbool.h>
+ #include <math.h>
+ #include <stdbool.h>
  #include "sauria_regs.h"
  #include "sauria_util.h"
  #include "sauria.h"
+ #include "approx_output_tensor_0.h"
+ #include "input_tensor.h"
+ #include "weight_tensor.h"
  #include "approx_output_tensor_0.h"
  #include "input_tensor.h"
  #include "weight_tensor.h"
@@ -56,21 +61,39 @@
  uint32_t ret_reg;
  sauria_t sauria; 
  //int32_t psums[C_c][C_h][C_w] __attribute__ ((aligned (4))) = {0};
+ sauria_t sauria; 
+ //int32_t psums[C_c][C_h][C_w] __attribute__ ((aligned (4))) = {0};
 
  /* Pseudo-DMA 1D trasfer function */
  int dma_run(void *dst_ptr, const void *src_ptr, uint32_t size_transfer_byte, uint32_t dst_inc) {
+ int dma_run(void *dst_ptr, const void *src_ptr, uint32_t size_transfer_byte, uint32_t dst_inc) {
   if (!src_ptr || !dst_ptr || !size_transfer_byte) {
+      return -1;
       return -1;
   }
 
   volatile uint8_t *src = (volatile uint8_t *)src_ptr;
   volatile uint8_t *dst = (volatile uint8_t *)dst_ptr;
+  volatile uint8_t *src = (volatile uint8_t *)src_ptr;
+  volatile uint8_t *dst = (volatile uint8_t *)dst_ptr;
 
   for (uint32_t i = 0; i < size_transfer_byte; i++) {
+      dst[i*dst_inc] = src[i];
       dst[i*dst_inc] = src[i];
   }
 
   return 0;
+}
+
+uint16_t ceil_int(double num) {
+  uint16_t result = (uint16_t)num; 
+  if (num > (double)result) {
+      result++;
+  }
+  return result;
+}
+
+
 }
 
 uint16_t ceil_int(double num) {

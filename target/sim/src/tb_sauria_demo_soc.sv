@@ -1,10 +1,10 @@
 /*
  * SAURIA demonstrator test-bench
- * – loads NUM_MATS reference tensors (16 × 16 × int32) from .mem files
- * – lets the DUT run
- * – compares matrix m with SRAM lines  m*64 … m*64+63
+ * ï¿½ loads NUM_MATS reference tensors (16 ï¿½ 16 ï¿½ int32) from .mem files
+ * ï¿½ lets the DUT run
+ * ï¿½ compares matrix m with SRAM lines  m*64 ï¿½ m*64+63
  *
- * Copyright 2025 PoliTo — Apache-2.0 WITH SHL-2.1
+ * Copyright 2025 PoliTo ï¿½ Apache-2.0 WITH SHL-2.1
  */
 
 module tb_sauria_demo_soc #(
@@ -34,20 +34,14 @@ module tb_sauria_demo_soc #(
     .UseDramSys  (UseDramSys)
   ) fix();
 
-  //---------------------------------------------------------------------------
-  // Reference storage — flat: 256 words per matrix
-  //---------------------------------------------------------------------------
   localparam int ROWS            = 16;
   localparam int COLS            = 16;
   localparam int WORDS_PER_LINE  = 4;
-  localparam int LINES_PER_MAT   = ROWS * COLS / WORDS_PER_LINE; // = 64
-  localparam int WORDS_PER_MAT   = ROWS * COLS;                  // = 256
+  localparam int LINES_PER_CH   = ROWS * COLS / WORDS_PER_LINE; // = 64
+  localparam int WORDS_PER_CH   = ROWS * COLS;                  // = 256
 
-  int signed ref_flat [0:NUM_MATS-1][0:WORDS_PER_MAT-1];
+  int signed ref_flat [0:NUM_CHS-1][0:WORDS_PER_CH-1];
 
-  //---------------------------------------------------------------------------
-  // Plus-arg bookkeeping
-  //---------------------------------------------------------------------------
   string      preload_elf;
   string      boot_hex;
   logic [1:0] boot_mode;
@@ -58,26 +52,17 @@ module tb_sauria_demo_soc #(
   // Test sequence
   //---------------------------------------------------------------------------
   initial begin
-    //-----------------------------------------------------------------------
-    // Locals (declare before statements – Questa requirement)
-    //-----------------------------------------------------------------------
     int               m, row, col, errors;
     int               flat_idx, line_idx, word_sel;
     int  signed       dut_word, ref_word;
     logic [127:0]     mem_line;
 
-    //-----------------------------------------------------------------------
-    // 1) Load all reference matrices
-    //-----------------------------------------------------------------------
-    for (m = 0; m < NUM_MATS; m++) begin
-      $display("[TB] Loading matrix %0d from \"%s\"",
+    for (m = 0; m < NUM_CHS; m++) begin
+      $display("[TB] Loading Channel %0d from \"%s\"",
                m+1, REF_FILES[m]);
       $readmemh(REF_FILES[m], ref_flat[m]);
     end
 
-    //-----------------------------------------------------------------------
-    // 2) Boot DUT (unchanged from your original flow)
-    //-----------------------------------------------------------------------
     if (!$value$plusargs("BOOTMODE=%d", boot_mode))     boot_mode     = 0;
     if (!$value$plusargs("PRELMODE=%d", preload_mode))  preload_mode  = 0;
     if (!$value$plusargs("BINARY=%s",   preload_elf))   preload_elf   = "";
@@ -107,26 +92,21 @@ module tb_sauria_demo_soc #(
       fix.vip.jtag_wait_for_eoc(exit_code);
     end
 
-    //-----------------------------------------------------------------------
-    // 3) Compare every matrix against its 64-line SRAM block
-    //-----------------------------------------------------------------------
-    for (m = 0; m < NUM_MATS; m++) begin
+    // Verification against the reference data
+    for (m = 0; m < NUM_CHS; m++) begin
       errors = 0;
-      $display("\n[TB] === Checking matrix %0d ===", m+1);
+      $display("\n[TB] === Checking Channel %0d ===", m+1);
 
       for (row = 0; row < ROWS; row++) begin
         for (col = 0; col < COLS; col++) begin
-          // ----- compute SRAM address & word-select ----------------------
-          line_idx  = m*LINES_PER_MAT + row*WORDS_PER_LINE + (col/WORDS_PER_LINE);
+          line_idx  = m*LINES_PER_CH + row*WORDS_PER_LINE + (col/WORDS_PER_LINE);
           word_sel  = col % WORDS_PER_LINE;
           mem_line  = fix.dut.sauria_core_i.sram_top_i.SRAMC_i.sram_0_i.mem[line_idx];
           dut_word  = $signed(mem_line >> (word_sel*32));
 
-          // reference
-          flat_idx  = row*COLS + col;           // 0?255
+          flat_idx  = row*COLS + col;           // 0â€¥255
           ref_word  = ref_flat[m][flat_idx];
 
-          // compare
           if (dut_word !== ref_word) begin
             $display("  M%0d[%0d][%0d] : DUT=%0d  EXP=%0d",
                      m+1, row, col, dut_word, ref_word);
@@ -136,16 +116,13 @@ module tb_sauria_demo_soc #(
       end
 
       if (errors == 0)
-        $display("[TB] *** Matrix %0d PASS ***", m+1);
+        $display("[TB] *** Channel %0d PASS ***", m+1);
       else
-        $display("[TB] *** Matrix %0d FAIL – %0d mismatch(es) ***",
+        $display("[TB] *** Channel %0d FAIL â€“ %0d mismatch(es) ***",
                  m+1, errors);
     end
-
-    //-----------------------------------------------------------------------
-    // 4) Done
-    //-----------------------------------------------------------------------
-    $display("\n[TB] All %0d matrices checked – simulation finished.", NUM_MATS);
+    
+    $display("\n[TB] All %0d matrices checked â€“ simulation finished.", NUM_CHS);
     $finish;
   end
 
