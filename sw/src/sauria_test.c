@@ -15,7 +15,6 @@
 #include "params.h"
 #include "util.h"
 #include "sauria_regs.h"
-#include "sauria_io.h"
 #include "sauria_util.h"
 #include <stdio.h>
 #include <string.h>

@@ -89,12 +89,12 @@ hw-demo:
 
 .PHONY: sw
 sw:
-	@if ls $(CHS_ROOT)/sw/lib/sauria 1> /dev/null 2>&1; then \
-		rm $(CHS_ROOT)/sw/lib/sauria_*; \
+	@if ls $(CHS_ROOT)/sw/include/sauria* 1> /dev/null 2>&1; then \
+		rm $(CHS_ROOT)/sw/include/sauria*; \
 	fi
 
-	@if ls $(CHS_ROOT)/sw/tests/sauria_* 1> /dev/null 2>&1; then \
-		rm $(CHS_ROOT)/sw/tests/sauria_*; \
+	@if ls $(CHS_ROOT)/sw/tests/sauria* 1> /dev/null 2>&1; then \
+		rm $(CHS_ROOT)/sw/tests/sauria*; \
 	fi
 
 	find $(SAURIA_DEMO_SW_DIR)/lib/ -type f -exec cp {} $(CHS_ROOT)/sw/include \;
@@ -104,11 +104,42 @@ sw:
 
 	$(MAKE) -B chs-sw-all
 
-BIN_SEL ?= 0
+PROJECT ?= "hello_world"
+
+--help:
+
+.PHONY: help
+help:
+	@echo "Available Makefile targets for the SAURIA-Cheshire-demo project:"
+	@echo ""
+	@echo "  help            Show this help message"
+	@echo "  set-up          Update dependencies using Bender and clone SAURIA"
+	@echo "  update-sauria   Force-refresh the SAURIA vendor folder"
+	@echo "  hw-chs          Compile the Cheshire hardware and prepare the simulation"
+	@echo "  hw-sauria       Compile the SAURIA core RTL files"
+	@echo "  hw-demo         Compile the SAURIA demo SoC and testbench"
+	@echo "  hw-all          Run hw-chs, hw-sauria, and hw-demo"
+	@echo "  sw              Prepare software sources and build SAURIA-specific tests"
+	@echo "  sim-gui         Launch ModelSim GUI for simulating the SAURIA demo SoC"
+	@echo ""
+	@echo "Optional variables:"
+	@echo "  PROJECT=<name>  Set the software project name for simulation (default: hello_world)"
+
 
 .PHONY: sim-gui
 sim-gui:
-	@cd $(SAURIA_DEMO_VSIM_DIR) && vsim -gui -do "set BIN_SEL $(BIN_SEL); source start.sauria_demo.tcl; run -all" &
+ifeq ($(filter --help,$(MAKECMDGOALS)),--help)
+	@echo "sim-gui: Launch the ModelSim GUI for simulating the SAURIA demo SoC."
+	@echo "Usage:"
+	@echo "  make sim-gui PROJECT=<project_name>"
+	@echo ""
+	@echo "Example:"
+	@echo "  make sim-gui PROJECT=hello_world"
+	@echo ""
+	@echo "Default PROJECT is: hello_world"
+else
+	@cd $(SAURIA_DEMO_VSIM_DIR) && vsim -gui -do "set PROJECT $(PROJECT); source start.sauria_demo.tcl" &
+endif
 
 .PHONY: hw-all
 hw-all: hw-chs hw-sauria hw-demo
