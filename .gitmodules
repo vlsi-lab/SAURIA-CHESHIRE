@@ -1,3 +1,4 @@
 [submodule "vendor/sauria"]
 	path = vendor/sauria
 	url = https://github.com/TommiTerza/sauria.git
+  branch = main
