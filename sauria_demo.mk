@@ -16,6 +16,9 @@ SAURIA_DEMO_XIL_DIR := $(SAURIA_DEMO_TGT_DIR)/fpga
 SAURIA_DEMO_SIM_DIR := $(SAURIA_DEMO_TGT_DIR)/sim
 SAURIA_DEMO_VSIM_DIR := $(SAURIA_DEMO_TGT_DIR)/sim/vsim
 
+
+include $(SAURIA_DEMO_TGT_DIR)/fpga/xilinx.mk
+
 # Cheshire defines
 CHS_ROOT  := $(shell bender path cheshire)
 
@@ -105,6 +108,14 @@ sw:
 	$(MAKE) -B chs-sw-all
 
 PROJECT ?= "hello_world"
+
+xilinx-all:  $(DEMO_XILINX_ALL)
+chs-all:         $(CHS_ALL)
+chs-sw-all:      $(CHS_SW_ALL)
+chs-hw-all:      $(CHS_HW_ALL)
+chs-bootrom-all: $(CHS_BOOTROM_ALL)
+chs-sim-all:     $(CHS_SIM_ALL)
+chs-dramsys-all: $(CHS_DRAMSYS_ALL)
 
 --help:
 
